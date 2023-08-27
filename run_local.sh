@@ -1,1 +1,2 @@
-gunicorn app:app
+export FLASK_ENV=development
+gunicorn app:app --reload
