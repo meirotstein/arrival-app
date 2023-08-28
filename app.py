@@ -1,7 +1,9 @@
 from gsheets import GSheets
 import json
 from flask import Flask, Response, send_from_directory
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:*"}})
 
 @app.route('/api/sheets/<sheetId>')
 def serve_sheets_api(sheetId):
