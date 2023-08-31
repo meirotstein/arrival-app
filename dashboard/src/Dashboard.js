@@ -7,8 +7,8 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await loadData();
-        setData(await response.json());
+        const data = await loadData();
+        setData(data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
