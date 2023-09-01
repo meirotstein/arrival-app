@@ -1,11 +1,20 @@
 import './App.css';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import Dashboard from './Dashboard';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 function App() {
   return (
-    <div className="App">
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
       <Dashboard/>
-    </div>
+    </ThemeProvider>
   );
 }
 
