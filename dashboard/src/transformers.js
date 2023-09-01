@@ -17,7 +17,7 @@ export const sheetTransformer = (rawData) => {
   const hourIdx = headerRow.indexOf(colNames.hour);
   const expectToArriveIdx = headerRow.indexOf(colNames.expectToArrive);
   const companyIdx = headerRow.indexOf(colNames.company);
-  const platoonIdx = headerRow.indexOf(colNames.platoon);
+  // const platoonIdx = headerRow.indexOf(colNames.platoon);
 
   rawData.slice(1).forEach(row => {
     const companyName = row[companyIdx];
