@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { CircularProgress, Grid, Paper } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 import { loadData } from './Client';
@@ -39,13 +39,13 @@ function Dashboard() {
   const [arrivalPercentageBar, setArrivalPercentageBar] = useState([]);
   const classes = useStyles();
 
-  const entries = {
+  const entries =  useMemo(() => ({
     companyA: 'פלוגה א',
     companyB: 'פלוגה ב',
     companyC: 'פלוגה ג',
     companyMST: 'מסייעת',
     companyMFK: 'מפקדה',
-  }
+  }), [])
 
   useEffect(() => {
     const fetchData = async () => {
