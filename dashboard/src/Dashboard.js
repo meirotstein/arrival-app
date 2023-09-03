@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { CircularProgress, Grid, Paper } from '@mui/material';
+import { BarChart } from '@mui/x-charts';
 import { loadData } from './Client';
 import { styled } from '@mui/material/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 
 const DashboardContainer = styled('div')(({ theme }) => ({
   margin: theme.spacing(2),
@@ -23,15 +25,45 @@ const TitleItem= styled(Item)(({ theme }) => ({
   fontSize: theme.spacing(3)
 }));
 
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    chart: {
+      marginLeft: theme.spacing(2),
+      marginTop: `-${theme.spacing(7)}`
+    },
+  }),
+);
+
 function Dashboard() {
   const [data, setData] = useState(null);
+  const [arrivalPercentageBar, setArrivalPercentageBar] = useState([]);
+  const classes = useStyles();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await loadData();
-        console.log(data);
+        const percentageBarData = [
+          data[entries.companyA].expected > 0 ?
+            (data[entries.companyA].arrived / data[entries.companyA].expected)*100:
+            0,
+          data[entries.companyB].expected > 0 ?
+            (data[entries.companyB].arrived / data[entries.companyB].expected)*100:
+            0,
+          data[entries.companyC].expected > 0 ?
+            (data[entries.companyC].arrived / data[entries.companyC].expected)*100:
+            0,
+          data[entries.companyMFK].expected > 0 ?
+            (data[entries.companyMFK].arrived / data[entries.companyMFK].expected)*100:
+            0,
+          data[entries.companyMST].expected > 0 ?
+            (data[entries.companyMST].arrived / data[entries.companyMST].expected)*100:
+            0,
+        ]
         setData(data);
+        setArrivalPercentageBar(percentageBarData)
+
+        console.log(data, percentageBarData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -50,7 +82,8 @@ function Dashboard() {
 
   return (
     <DashboardContainer>
-      {data ? (<Grid container spacing={2}>
+      {data ? (<>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           <TitleItem>{`סה"כ הגיעו: ${data.totalArrived} מתוך ${data.totalExpected}`}</TitleItem>
         </Grid>
@@ -73,18 +106,36 @@ function Dashboard() {
         <Grid item xs={12}>
           <TitleItem>מפקדה</TitleItem>
           <Item>{`${data[entries.companyMFK].arrived} מתוך ${data[entries.companyMFK].expected}`}</Item>
-        </Grid>
-      </Grid>) : (
+        </Grid>        
+      </Grid>
+      <div className={classes.chart}>
+      <BarChart
+          xAxis={[
+            {
+              id: 'company',
+              data: [entries.companyA, entries.companyB, entries.companyC, entries.companyMST, entries.companyMFK],
+              scaleType: 'band',
+            },
+          ]}
+          yAxis={[
+            {
+              max: 100,
+              label: 'אחוז התייצבות',
+            }
+          ]}
+          series={[
+            {
+              data: arrivalPercentageBar,
+            },
+          ]}
+          width={window.innerWidth - 20}
+          height={300}
+        />
+        </div>
+      </>
+      ) : (
         <CircularProgress disableShrink />
       )}
-      {/* {data ? (
-        <div>
-          <h2>Fetched Sheet data:</h2>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )} */}
     </DashboardContainer>
   );
 }
