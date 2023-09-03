@@ -39,6 +39,14 @@ function Dashboard() {
   const [arrivalPercentageBar, setArrivalPercentageBar] = useState([]);
   const classes = useStyles();
 
+  const entries = {
+    companyA: 'פלוגה א',
+    companyB: 'פלוגה ב',
+    companyC: 'פלוגה ג',
+    companyMST: 'מסייעת',
+    companyMFK: 'מפקדה',
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -70,15 +78,7 @@ function Dashboard() {
     };
 
     fetchData();
-  }, []);
-
-  const entries = {
-    companyA: 'פלוגה א',
-    companyB: 'פלוגה ב',
-    companyC: 'פלוגה ג',
-    companyMST: 'מסייעת',
-    companyMFK: 'מפקדה',
-  }
+  }, [entries]);
 
   return (
     <DashboardContainer>
