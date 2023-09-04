@@ -89,26 +89,25 @@ function Dashboard() {
   };
 
   const pollStart = () => {
-    console.log('start polling', pollInterval);
     if (!pollInterval) {
       fetchData();
       const interval = setInterval(() => {
         fetchData();
       }, 10000);
       setPollIntervalId(interval);
-      console.log('started polling', interval);
+      console.log('start polling', interval);
     }
   }
 
   const pollEnd = () => {
-    console.log('stop polling', pollInterval);
     if (pollInterval) {
+      console.log('stop polling', pollInterval);
       clearInterval(pollInterval);
       setPollIntervalId(undefined);
     }
   }
 
-  useEffect(() => pollStart(), []);
+  useEffect(() => pollStart(), [pollStart]);
   usePageVisibility(pollStart, pollEnd);
 
   return (
