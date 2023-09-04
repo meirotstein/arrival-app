@@ -20,7 +20,7 @@ const Item = styled(Paper)(({ theme }) => ({
   fontSize: theme.spacing(2)
 }));
 
-const TitleItem= styled(Item)(({ theme }) => ({
+const TitleItem = styled(Item)(({ theme }) => ({
   fontWeight: theme.typography.fontWeightBold,
   fontSize: theme.spacing(3)
 }));
@@ -39,7 +39,7 @@ function Dashboard() {
   const [arrivalPercentageBar, setArrivalPercentageBar] = useState([]);
   const classes = useStyles();
 
-  const entries =  useMemo(() => ({
+  const entries = useMemo(() => ({
     companyA: 'פלוגה א',
     companyB: 'פלוגה ב',
     companyC: 'פלוגה ג',
@@ -52,20 +52,20 @@ function Dashboard() {
       try {
         const data = await loadData();
         const percentageBarData = [
-          data[entries.companyA].expected > 0 ?
-            (data[entries.companyA].arrived / data[entries.companyA].expected)*100:
+          data[entries.companyA]?.expected > 0 ?
+            (data[entries.companyA].arrived / data[entries.companyA].expected) * 100 :
             0,
-          data[entries.companyB].expected > 0 ?
-            (data[entries.companyB].arrived / data[entries.companyB].expected)*100:
+          data[entries.companyB]?.expected > 0 ?
+            (data[entries.companyB].arrived / data[entries.companyB].expected) * 100 :
             0,
-          data[entries.companyC].expected > 0 ?
-            (data[entries.companyC].arrived / data[entries.companyC].expected)*100:
+          data[entries.companyC]?.expected > 0 ?
+            (data[entries.companyC].arrived / data[entries.companyC].expected) * 100 :
             0,
-          data[entries.companyMFK].expected > 0 ?
-            (data[entries.companyMFK].arrived / data[entries.companyMFK].expected)*100:
+          data[entries.companyMFK]?.expected > 0 ?
+            (data[entries.companyMFK].arrived / data[entries.companyMFK].expected) * 100 :
             0,
-          data[entries.companyMST].expected > 0 ?
-            (data[entries.companyMST].arrived / data[entries.companyMST].expected)*100:
+          data[entries.companyMST]?.expected > 0 ?
+            (data[entries.companyMST].arrived / data[entries.companyMST].expected) * 100 :
             0,
         ]
         setData(data);
@@ -78,59 +78,63 @@ function Dashboard() {
     };
 
     fetchData();
+    const interval = setInterval(() => {
+      fetchData();
+    }, 10000);
+    return () => clearInterval(interval);
   }, [entries]);
 
   return (
     <DashboardContainer>
       {data ? (<>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TitleItem>{`סה"כ הגיעו: ${data.totalArrived} מתוך ${data.totalExpected}`}</TitleItem>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TitleItem>{`סה"כ הגיעו: ${data.totalArrived} מתוך ${data.totalExpected}`}</TitleItem>
+          </Grid>
+          <Grid item xs={6}>
+            <TitleItem>פלוגה א</TitleItem>
+            {data[entries.companyA] && <Item>{`${data[entries.companyA].arrived} מתוך ${data[entries.companyA].expected}`}</Item>}
+          </Grid>
+          <Grid item xs={6}>
+            <TitleItem>פלוגה ב</TitleItem>
+            {data[entries.companyB] && <Item>{`${data[entries.companyB].arrived} מתוך ${data[entries.companyB].expected}`}</Item>}
+          </Grid>
+          <Grid item xs={6}>
+            <TitleItem>פלוגה ג</TitleItem>
+            {data[entries.companyC] && <Item>{`${data[entries.companyC].arrived} מתוך ${data[entries.companyC].expected}`}</Item>}
+          </Grid>
+          <Grid item xs={6}>
+            <TitleItem>מסייעת</TitleItem>
+            {data[entries.companyMST] && <Item>{`${data[entries.companyMST].arrived} מתוך ${data[entries.companyMST].expected}`}</Item>}
+          </Grid>
+          <Grid item xs={12}>
+            <TitleItem>מפקדה</TitleItem>
+            {data[entries.companyMFK] && <Item>{`${data[entries.companyMFK].arrived} מתוך ${data[entries.companyMFK].expected}`}</Item>}
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <TitleItem>פלוגה א</TitleItem>
-          <Item>{`${data[entries.companyA].arrived} מתוך ${data[entries.companyA].expected}`}</Item>
-        </Grid>
-        <Grid item xs={6}>
-          <TitleItem>פלוגה ב</TitleItem>
-          <Item>{`${data[entries.companyB].arrived} מתוך ${data[entries.companyB].expected}`}</Item>
-        </Grid>
-        <Grid item xs={6}>
-          <TitleItem>פלוגה ג</TitleItem>
-          <Item>{`${data[entries.companyC].arrived} מתוך ${data[entries.companyC].expected}`}</Item>
-        </Grid>
-        <Grid item xs={6}>
-          <TitleItem>מסייעת</TitleItem>
-          <Item>{`${data[entries.companyMST].arrived} מתוך ${data[entries.companyMST].expected}`}</Item>
-        </Grid>
-        <Grid item xs={12}>
-          <TitleItem>מפקדה</TitleItem>
-          <Item>{`${data[entries.companyMFK].arrived} מתוך ${data[entries.companyMFK].expected}`}</Item>
-        </Grid>        
-      </Grid>
-      <div className={classes.chart}>
-      <BarChart
-          xAxis={[
-            {
-              id: 'company',
-              data: [entries.companyA, entries.companyB, entries.companyC, entries.companyMST, entries.companyMFK],
-              scaleType: 'band',
-            },
-          ]}
-          yAxis={[
-            {
-              max: 100,
-              label: 'אחוז התייצבות',
-            }
-          ]}
-          series={[
-            {
-              data: arrivalPercentageBar,
-            },
-          ]}
-          width={window.innerWidth - 20}
-          height={300}
-        />
+        <div className={classes.chart}>
+          <BarChart
+            xAxis={[
+              {
+                id: 'company',
+                data: [entries.companyA, entries.companyB, entries.companyC, entries.companyMST, entries.companyMFK],
+                scaleType: 'band',
+              },
+            ]}
+            yAxis={[
+              {
+                max: 100,
+                label: 'אחוז התייצבות',
+              }
+            ]}
+            series={[
+              {
+                data: arrivalPercentageBar,
+              },
+            ]}
+            width={window.innerWidth - 20}
+            height={300}
+          />
         </div>
       </>
       ) : (
