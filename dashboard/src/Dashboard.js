@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { CircularProgress, Grid, Paper, Chip } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 import { loadData } from './Client';
@@ -97,7 +97,7 @@ function Dashboard() {
       setPollIntervalId(interval);
       console.log('start polling', interval);
     }
-  }
+  };
 
   const pollEnd = () => {
     if (pollInterval) {
@@ -105,9 +105,9 @@ function Dashboard() {
       clearInterval(pollInterval);
       setPollIntervalId(undefined);
     }
-  }
+  };
 
-  useEffect(() => pollStart(), [pollStart]);
+  useEffect(() => pollStart());
   usePageVisibility(pollStart, pollEnd);
 
   return (
