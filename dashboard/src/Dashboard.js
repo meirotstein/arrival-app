@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { CircularProgress, Grid, Paper, Chip } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 import { loadData } from './Client';
