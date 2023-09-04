@@ -35,9 +35,6 @@ const useStyles = makeStyles((theme) =>
 );
 
 function Dashboard() {
-  const [data, setData] = useState(null);
-  const [arrivalPercentageBar, setArrivalPercentageBar] = useState([]);
-  const classes = useStyles();
 
   const entries = useMemo(() => ({
     companyA: 'פלוגה א',
@@ -46,6 +43,11 @@ function Dashboard() {
     companyMST: 'מסייעת',
     companyMFK: 'מפקדה',
   }), [])
+
+  const [data, setData] = useState(null);
+  const [arrivalPercentageBar, setArrivalPercentageBar] = useState([]);
+
+  const classes = useStyles();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -134,6 +136,7 @@ function Dashboard() {
             ]}
             width={window.innerWidth - 20}
             height={300}
+            tooltip={{ trigger: 'item' }}
           />
         </div>
       </>
