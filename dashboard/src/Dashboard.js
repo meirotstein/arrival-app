@@ -72,8 +72,8 @@ function Dashboard() {
           (data[entries.companyMST].arrived / data[entries.companyMST].expected) * 100 :
           0,
         data[entries.companyMFK]?.expected > 0 ?
-        (data[entries.companyMFK].arrived / data[entries.companyMFK].expected) * 100 :
-        0,
+          (data[entries.companyMFK].arrived / data[entries.companyMFK].expected) * 100 :
+          0,
       ]
       setData(data);
       setArrivalPercentageBar(percentageBarData)
@@ -163,8 +163,8 @@ function Dashboard() {
             tooltip={{ trigger: 'item' }}
           />
         </div>
-        { loading && <CircularProgress size={10} />}
-        { loadErrorMsg && <Chip label={loadErrorMsg} color="error" />}
+        {loading && <CircularProgress size={10} />}
+        {loadErrorMsg && <Chip label={loadErrorMsg} color="error" />}
       </>
       ) : (
         <CircularProgress />
