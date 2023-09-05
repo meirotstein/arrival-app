@@ -68,12 +68,12 @@ function Dashboard() {
         data[entries.companyC]?.expected > 0 ?
           (data[entries.companyC].arrived / data[entries.companyC].expected) * 100 :
           0,
-        data[entries.companyMFK]?.expected > 0 ?
-          (data[entries.companyMFK].arrived / data[entries.companyMFK].expected) * 100 :
-          0,
         data[entries.companyMST]?.expected > 0 ?
           (data[entries.companyMST].arrived / data[entries.companyMST].expected) * 100 :
           0,
+        data[entries.companyMFK]?.expected > 0 ?
+        (data[entries.companyMFK].arrived / data[entries.companyMFK].expected) * 100 :
+        0,
       ]
       setData(data);
       setArrivalPercentageBar(percentageBarData)
