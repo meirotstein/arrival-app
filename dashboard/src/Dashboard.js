@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { CircularProgress, Grid, Paper, Chip } from '@mui/material';
-import { BarChart } from '@mui/x-charts';
-import { loadData } from './Client';
+import { Chip, CircularProgress, Grid, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { createStyles, makeStyles } from '@mui/styles';
+import { BarChart } from '@mui/x-charts';
+import React, { useEffect, useMemo, useState } from 'react';
+import { loadData } from './Client';
+import { SoldierListModal } from './SoldierListModal';
 import { usePageVisibility } from './hooks/pageVisibility';
 
 const DashboardContainer = styled('div')(({ theme }) => ({
@@ -50,6 +51,8 @@ function Dashboard() {
   const [pollInterval, setPollIntervalId] = useState(undefined);
   const [loading, setLoading] = useState(false);
   const [loadErrorMsg, setLoadErrorMsg] = useState(undefined);
+  const [openSoldierList, setOpenSoldierList] = useState(false);
+  const [soldierListData, setSoldierListData] = useState(undefined);
 
   const classes = useStyles();
 
@@ -110,6 +113,11 @@ function Dashboard() {
   useEffect(() => pollStart());
   usePageVisibility(pollStart, pollEnd);
 
+  const openSoldierDataModal = (data) => {
+    setSoldierListData(data);
+    setOpenSoldierList(true);
+  }
+
   return (
     <DashboardContainer>
       {data ? (<>
@@ -117,23 +125,23 @@ function Dashboard() {
           <Grid item xs={12}>
             <TitleItem>{`סה"כ הגיעו: ${data.totalArrived} מתוך ${data.totalExpected}`}</TitleItem>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} onClick={() => openSoldierDataModal(data[entries.companyA])}>
             <TitleItem>פלוגה א</TitleItem>
             {data[entries.companyA] && <Item>{`${data[entries.companyA].arrived} מתוך ${data[entries.companyA].expected}`}</Item>}
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} onClick={() => openSoldierDataModal(data[entries.companyB])}>
             <TitleItem>פלוגה ב</TitleItem>
             {data[entries.companyB] && <Item>{`${data[entries.companyB].arrived} מתוך ${data[entries.companyB].expected}`}</Item>}
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} onClick={() => openSoldierDataModal(data[entries.companyC])}>
             <TitleItem>פלוגה ג</TitleItem>
             {data[entries.companyC] && <Item>{`${data[entries.companyC].arrived} מתוך ${data[entries.companyC].expected}`}</Item>}
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} onClick={() => openSoldierDataModal(data[entries.companyMST])}>
             <TitleItem>מסייעת</TitleItem>
             {data[entries.companyMST] && <Item>{`${data[entries.companyMST].arrived} מתוך ${data[entries.companyMST].expected}`}</Item>}
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} onClick={() => openSoldierDataModal(data[entries.companyMFK])}>
             <TitleItem>מפקדה</TitleItem>
             {data[entries.companyMFK] && <Item>{`${data[entries.companyMFK].arrived} מתוך ${data[entries.companyMFK].expected}`}</Item>}
           </Grid>
@@ -169,6 +177,7 @@ function Dashboard() {
       ) : (
         <CircularProgress />
       )}
+      <SoldierListModal open={openSoldierList} onClose={() => setOpenSoldierList(false)} data={soldierListData} />
     </DashboardContainer>
   );
 }
