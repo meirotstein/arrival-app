@@ -59,6 +59,9 @@ function Dashboard() {
 
   const fetchData = async () => {
     try {
+      if (loading) {
+        return;
+      }
       setLoading(true);
       const data = await loadData();
       const percentageBarData = [
@@ -96,7 +99,7 @@ function Dashboard() {
       fetchData();
       const interval = setInterval(() => {
         fetchData();
-      }, 10000);
+      }, 20000);
       setPollIntervalId(interval);
       console.log('start polling', interval);
     }
