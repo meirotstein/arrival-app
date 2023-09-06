@@ -99,7 +99,7 @@ function Dashboard() {
       fetchData();
       const interval = setInterval(() => {
         fetchData();
-      }, 20000);
+      }, 60000);
       setPollIntervalId(interval);
       console.log('start polling', interval);
     }
